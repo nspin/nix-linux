@@ -1,0 +1,41 @@
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index ff5ca9817a85..af05e9152ab1 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -10,7 +10,8 @@ include scripts/Kbuild.include
+ 
+ #
+ 
+-__modules := $(sort $(shell grep -h '\.ko$$' /dev/null $(wildcard $(MODVERDIR)/*.mod)))
++MODLISTCMD := find $(MODVERDIR) -name '*.mod' -exec grep '\.ko$$' {} \; | sort -u
++__modules := $(shell $(MODLISTCMD))
+ modules := $(patsubst %.o,%.ko,$(wildcard $(__modules:.ko=.o)))
+ 
+ PHONY += $(modules)
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 7d4af0d0accb..d537a5464fa3 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -61,7 +61,7 @@ kernelsymfile := $(objtree)/Module.symvers
+ modulesymfile := $(firstword $(KBUILD_EXTMOD))/Module.symvers
+ 
+ # Step 1), find all modules listed in $(MODVERDIR)/
+-MODLISTCMD := find $(MODVERDIR) -name '*.mod' | xargs -r grep -h '\.ko$$' | sort -u
++MODLISTCMD := find $(MODVERDIR) -name '*.mod' -exec grep '\.ko$$' {} \; | sort -u
+ __modules := $(shell $(MODLISTCMD))
+ modules   := $(patsubst %.o,%.ko, $(wildcard $(__modules:.ko=.o)))
+ 
+diff --git a/scripts/Makefile.modsign b/scripts/Makefile.modsign
+index da56aa78d245..e8b928f90c6f 100644
+--- a/scripts/Makefile.modsign
++++ b/scripts/Makefile.modsign
+@@ -8,7 +8,8 @@ __modsign:
+ 
+ include scripts/Kbuild.include
+ 
+-__modules := $(sort $(shell grep -h '\.ko$$' /dev/null $(wildcard $(MODVERDIR)/*.mod)))
++MODLISTCMD := find $(MODVERDIR) -name '*.mod' -exec grep '\.ko$$' {} \; | sort -u
++__modules := $(shell $(MODLISTCMD))
+ modules := $(patsubst %.o,%.ko,$(wildcard $(__modules:.ko=.o)))
+ 
+ PHONY += $(modules)

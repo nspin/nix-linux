@@ -1,0 +1,10 @@
+--- a/scripts/depmod.sh
++++ b/scripts/depmod.sh
+@@ -10,7 +10,7 @@
+ KERNELRELEASE=$2
+ SYMBOL_PREFIX=$3
+ 
+-if ! test -r System.map -a -x "$DEPMOD"; then
++if ! test -r System.map -a -n "$(command -v $DEPMOD)"; then
+ 	exit 0
+ fi
