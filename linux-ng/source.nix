@@ -1,6 +1,8 @@
+# TODO removeAttrs version
+
 { stdenv }:
 
-{ src, version, ... } @ args:
+{ src, version, extraVersion ? "", ... } @ args:
 
 stdenv.mkDerivation ({
 
@@ -32,4 +34,10 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-} // args)
+} // removeAttrs args [ "extraVersion" ] // {
+
+  passthru = {
+    inherit version extraVersion;
+  };
+
+})

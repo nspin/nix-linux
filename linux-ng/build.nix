@@ -14,10 +14,12 @@
       zImage = "zinstall";
     }.${kernelTarget} or "install"
 , cc ? null
+, kernelFile ? null
 }:
 
 let
   stdenv_ = stdenv;
+  kernelFile_ = kernelFile;
 in
 
 let
@@ -29,6 +31,9 @@ let
   moduleBuildDependencies = [
     libelf kmod sparse
   ];
+
+  defaultKernelFile = "${if kernelTarget == "zImage" then "vmlinuz" else "vmlinux"}-${source.version}${source.extraVersion}";
+  kernelFile = if kernelFile_ == null then defaultKernelFile else kernelFile_;
 
   self = stdenv.mkDerivation {
 
@@ -106,7 +111,7 @@ let
       inherit stdenv moduleBuildDependencies;
       configFile = config;
       config = mkQueriable (readConfig config);
-      kernel = "${self}/${if kernelTarget == "zImage" then "vmlinuz" else "vmlinux"}-${source.version}";
+      kernel = "${self}/${kernelFile}";
       modDirVersion = source.version;
     };
 
