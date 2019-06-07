@@ -46,7 +46,6 @@ let
     ];
 
     enableParallelBuilding = true;
-    requiredSystemFeatures = [ "big-parallel" ];
 
     NIX_NO_SELF_RPATH = true;
     hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
