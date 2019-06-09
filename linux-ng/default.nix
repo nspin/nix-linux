@@ -38,6 +38,7 @@ rec {
   getDefconfig = callPackage ./get-defconfig.nix {};
   makeConfig = callPackage ./make-config.nix {};
   makeAllnoconfig = callPackage ./make-allnoconfig.nix {};
+  kconfigTools = callPackage ./kconfig-tools.nix {};
 
   getInfo = callPackage ./info.nix {};
 
