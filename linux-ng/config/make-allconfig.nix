@@ -15,7 +15,6 @@ in
 stdenv.mkDerivation {
 
   name = "linux-${source.version}${source.extraVersion}-${target}.config";
-  dontAddHostSuffix = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex ];
