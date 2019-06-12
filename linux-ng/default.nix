@@ -30,12 +30,12 @@ rec {
 
   inherit mergeConfig isSubConfig;
 
-  readConfig = callPackage ./config/read-config.nix {};
-  writeConfig = callPackage ./config/write-config.nix {};
-  makeConfig = callPackage ./config/make-config.nix {};
+  readConfig = callPackage ./config/read.nix {};
+  writeConfig = callPackage ./config/write.nix {};
+  makeConfig = callPackage ./config/make-allconfig.nix {};
+  saveDefconfig = callPackage ./config/make-savedefconfig.nix {};
   getDefconfig = callPackage ./config/get-defconfig.nix {};
-  saveDefconfig = callPackage ./config/save-defconfig.nix {};
-  configEnv = callPackage ./config/config-env.nix {};
+  configEnv = callPackage ./config/env.nix {};
 
   doSource = callPackage ./source.nix {};
   doHeaders = callPackage ./headers.nix {};

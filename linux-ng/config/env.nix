@@ -43,6 +43,9 @@ stdenv.mkDerivation {
     mm() {
       m "$@" menuconfig
     }
+    ms() {
+      m "$@" savedefconfig
+    }
   '' + lib.optionalString (config != null) ''
     cp -v --no-preserve=mode,ownership ${config} .config
   '';
