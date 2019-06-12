@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
 
-  name = "linux-headers";
+  name = "linux-headers-${source.fullVersion}";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

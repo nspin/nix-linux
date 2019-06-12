@@ -36,6 +36,7 @@ stdenv.mkDerivation ({
 
   passthru = {
     inherit version extraVersion;
+    fullVersion = version + extraVersion;
   };
 
 })

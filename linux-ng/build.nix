@@ -39,7 +39,7 @@ let
 
   self = stdenv.mkDerivation {
 
-    name = "linux";
+    name = "linux-${source.fullVersion}";
 
     outputs = [
       "out" "mod" "dev"
@@ -65,12 +65,8 @@ let
     phases = [ "configurePhase" "buildPhase" "installPhase" ];
 
     configurePhase = ''
-      runHook preConfigure
-
-      mkdir -p $dev
+      mkdir $dev
       cp -v ${config} $dev/.config
-
-      runHook postConfigure
     '';
 
     makeFlags =  [

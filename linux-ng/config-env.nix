@@ -3,6 +3,7 @@
 }:
 
 { source
+, config ? null
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
 }:
 
@@ -12,7 +13,7 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "linux-config";
+  name = "linux-config-env";
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -37,8 +38,13 @@ stdenv.mkDerivation {
       export KCONFIG_CONFIG=$1
     }
     m() {
-      make $makeFlags $@
+      make $makeFlags "$@"
     }
+    mm() {
+      m "$@" menuconfig
+    }
+  '' + lib.optionalString (config != null) ''
+    cp -v --no-preserve=mode,ownership ${config} .config
   '';
 
 }

@@ -3,7 +3,8 @@
 }:
 
 { source
-, allconfig
+, target
+, allconfig ? null
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
 }:
 
@@ -13,32 +14,28 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "linux-config";
+  name = "linux-${source.version}${source.extraVersion}-${target}.config";
+  dontAddHostSuffix = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex ];
 
-  phases = [ "buildPhase" "installPhase" ];
+  phases = [ "buildPhase" ];
 
   makeFlags = [
     "-C" "${source}"
     "O=$(PWD)"
-    "KCONFIG_ALLCONFIG=${allconfig}"
     "ARCH=${kernelArch}"
-  ] ++ lib.optional isCross [
+  ] ++ lib.optionals isCross [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals (allconfig != null) [
+    "KCONFIG_ALLCONFIG=${allconfig}"
+  ] ++ [
+    "KCONFIG_CONFIG=$(out)"
   ];
 
   buildFlags = [
-    "alldefconfig"
+    target
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mv .config $out
-
-    runHook postInstall
-  '';
 
 }

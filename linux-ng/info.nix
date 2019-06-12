@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "linux-config";
+  name = "linux-info";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex bc openssl ];
@@ -21,12 +21,7 @@ stdenv.mkDerivation {
   phases = [ "configurePhase" "buildPhase" ];
 
   configurePhase = ''
-    runHook preConfigure
-
     mkdir -p $out
-    cp -v ${config} $out/.config
-
-    runHook postConfigure
   '';
 
   makeFlags = [
@@ -35,6 +30,8 @@ stdenv.mkDerivation {
     "ARCH=${kernelArch}"
   ] ++ lib.optional isCross [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ [
+    "KCONFIG_CONFIG=${config}"
   ];
 
   buildFlags = [
@@ -43,15 +40,9 @@ stdenv.mkDerivation {
   ];
 
   # installPhase = ''
-  #   runHook preInstall
-
-  #   runHook postInstall
   # '';
 
   # fixupPhase = ''
-  #   runHook preFixup
-
-  #   runHook postFixup
   # '';
 
 }

@@ -1,7 +1,7 @@
 { runCommand, buildPackages }:
 
-configFile:
+config:
 
 import (runCommand "config.nix" {} ''
-  ${buildPackages.python3}/bin/python ${./read_config.py} < ${configFile} > $out
+  ${buildPackages.python3}/bin/python ${./read_config.py} < ${config} > $out
 '').outPath

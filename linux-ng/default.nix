@@ -6,11 +6,11 @@ let
   mergeConfig = with lib;
     foldl (x: y: x // y) {};
 
-  allPresent = subconfig: config: with lib;
+  isSubConfig = subconfig: config: with lib;
     all id
-      (mapAttrsToList (k: v: getAttr k config == v)
-        (filterAttrs (k: v: v != null)
-          subconfig));
+      (mapAttrsToList
+        (k: v: (config.${k} or null) == v)
+        subconfig);
 
   mkQueries = config: with lib; rec {
     isSet = attr: hasAttr attr config;
@@ -28,24 +28,22 @@ in
 
 rec {
 
-  inherit mergeConfig allPresent;
-
-  readConfig = callPackage ./read-config.nix {};
-  writeConfig = callPackage ./write-config.nix {};
+  inherit mergeConfig isSubConfig;
 
   doSource = callPackage ./source.nix {};
-
-  getDefconfig = callPackage ./get-defconfig.nix {};
-  makeConfig = callPackage ./make-config.nix {};
-  makeAllnoconfig = callPackage ./make-allnoconfig.nix {};
-  configEnv = callPackage ./config-env.nix {};
-
-  getInfo = callPackage ./info.nix {};
-
   doHeaders = callPackage ./headers.nix {};
   doKernel = callPackage ./build.nix {
     inherit readConfig mkQueriable;
   };
+
+  readConfig = callPackage ./read-config.nix {};
+  writeConfig = callPackage ./write-config.nix {};
+  makeConfig = callPackage ./make-config.nix {};
+  getDefconfig = callPackage ./get-defconfig.nix {};
+  saveDefconfig = callPackage ./save-defconfig.nix {};
+  configEnv = callPackage ./config-env.nix {};
+
+  getInfo = callPackage ./info.nix {};
 
   kernelPatches = {
     bridge_stp_helper = ./patches/bridge-stp-helper.patch;
