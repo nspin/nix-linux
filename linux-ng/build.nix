@@ -1,4 +1,4 @@
-{ stdenv, overrideCC, lib, buildPackages, runCommand, writeScript, removeReferencesTo
+{ stdenv, overrideCC, lib, buildPackages, nukeReferences
 , nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl, libelf, utillinux, kmod, sparse
 
 , readConfig, mkQueriable
@@ -13,8 +13,10 @@
     { uImage = "uinstall";
       zImage = "zinstall";
     }.${kernelTarget} or "install"
-, cc ? null
 , kernelFile ? null
+, cc ? null
+, nukeRefs ? true
+, passthru ? {}
 }:
 
 let
@@ -48,7 +50,7 @@ let
     enableParallelBuilding = true;
 
     NIX_NO_SELF_RPATH = true;
-    hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+    hardeningDisable = [ "all" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [
@@ -56,6 +58,8 @@ let
       nettools utillinux
       openssl gmp libmpc mpfr libelf
       kmod
+    ] ++ lib.optionals nukeRefs [
+      nukeReferences
     ];
 
     phases = [ "configurePhase" "buildPhase" "installPhase" ];
@@ -102,6 +106,9 @@ let
     postInstall = ''
       release="$(cat $dev/include/config/kernel.release)"
       rm $mod/lib/modules/$release/{source,build}
+    '' + lib.optionalString nukeRefs ''
+      find $out -type f -exec nuke-refs {} \;
+      find $mod -type f -exec nuke-refs {} \;
     '';
 
     passthru = {
@@ -110,9 +117,9 @@ let
       inherit stdenv moduleBuildDependencies;
       configFile = config;
       config = mkQueriable (readConfig config);
-      kernel = "${self}/${kernelFile}";
+      kernel = "${self.out}/${kernelFile}";
       modDirVersion = source.version;
-    };
+    } // passthru;
 
   };
 
