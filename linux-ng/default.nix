@@ -30,18 +30,18 @@ rec {
 
   inherit mergeConfig isSubConfig;
 
+  readConfig = callPackage ./config/read-config.nix {};
+  writeConfig = callPackage ./config/write-config.nix {};
+  makeConfig = callPackage ./config/make-config.nix {};
+  getDefconfig = callPackage ./config/get-defconfig.nix {};
+  saveDefconfig = callPackage ./config/save-defconfig.nix {};
+  configEnv = callPackage ./config/config-env.nix {};
+
   doSource = callPackage ./source.nix {};
   doHeaders = callPackage ./headers.nix {};
   doKernel = callPackage ./build.nix {
     inherit readConfig mkQueriable;
   };
-
-  readConfig = callPackage ./read-config.nix {};
-  writeConfig = callPackage ./write-config.nix {};
-  makeConfig = callPackage ./make-config.nix {};
-  getDefconfig = callPackage ./get-defconfig.nix {};
-  saveDefconfig = callPackage ./save-defconfig.nix {};
-  configEnv = callPackage ./config-env.nix {};
 
   getInfo = callPackage ./info.nix {};
 
@@ -51,6 +51,6 @@ rec {
     depmod_check = ./patches/depmod-check.patch;
   };
 
-  commonConfig = callPackage ./common-config.nix {};
+  nixosCommonConfig = callPackage ./nixos-common-config.nix {};
 
 }
