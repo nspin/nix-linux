@@ -32,10 +32,12 @@ rec {
 
   readConfig = callPackage ./config/read.nix {};
   writeConfig = callPackage ./config/write.nix {};
-  makeConfig = callPackage ./config/make-allconfig.nix {};
-  saveDefconfig = callPackage ./config/make-savedefconfig.nix {};
   getDefconfig = callPackage ./config/get-defconfig.nix {};
+  makeConfig = callPackage ./config/make-allconfig.nix {};
   configEnv = callPackage ./config/env.nix {};
+
+  savedefconfig = callPackage ./config/make-savedefconfig.nix {};
+  olddefconfig = callPackage ./config/make-olddefconfig.nix {};
 
   doSource = callPackage ./source.nix {};
   doHeaders = callPackage ./headers.nix {};
