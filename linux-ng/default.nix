@@ -1,16 +1,6 @@
-{ lib, callPackage }:
+{ lib, callPackage, common }:
 
 let
-
-  # TODO use or work like merge_config.sh
-  mergeConfig = with lib;
-    foldl (x: y: x // y) {};
-
-  isSubConfig = subconfig: config: with lib;
-    all id
-      (mapAttrsToList
-        (k: v: (config.${k} or null) == v)
-        subconfig);
 
   mkQueries = config: with lib; rec {
     isSet = attr: hasAttr attr config;
@@ -25,13 +15,8 @@ let
   mkQueriable = config: config // mkQueries config;
 
 in
+lib.fix (self: with self; common // {
 
-rec {
-
-  inherit mergeConfig isSubConfig;
-
-  readConfig = callPackage ./config/read.nix {};
-  writeConfig = callPackage ./config/write.nix {};
   getDefconfig = callPackage ./config/get-defconfig.nix {};
   makeConfig = callPackage ./config/make-allconfig.nix {};
   configEnv = callPackage ./config/env.nix {};
@@ -44,6 +29,7 @@ rec {
   doKernel = callPackage ./build.nix {
     inherit readConfig mkQueriable;
   };
+  doDtbs = callPackage ./dtbs.nix {};
 
   getInfo = callPackage ./info.nix {};
 
@@ -55,4 +41,4 @@ rec {
 
   nixosCommonConfig = callPackage ./nixos-common-config.nix {};
 
-}
+})

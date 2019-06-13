@@ -1,7 +1,7 @@
 import re
 import sys
 
-yes_re = re.compile(r'CONFIG_(?P<key>[A-Za-z0-9_]+)=(?P<quote>"?)(?P<value>[^"\n]*)(?P=quote)\n');
+yes_re = re.compile(r'CONFIG_(?P<key>[A-Za-z0-9_]+)=(?P<value>[^\n]+)\n');
 no_re = re.compile(r'(#([^\n]*))?\n');
 
 print('{')
@@ -14,6 +14,6 @@ for line in sys.stdin:
     else:
         key = m.group('key')
         value = m.group('value')
-        print('  "{}" = "{}";'.format(key, value))
+        print('  "{}" = \'\'{}\'\';'.format(key, value))
 
 print('}')
