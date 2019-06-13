@@ -20,7 +20,7 @@ stdenv.mkDerivation ({
 
   # NOTE: DEPMOD is required to be an absolute path in scripts/depmod.sh for certain versions
   fixupPhase = ''
-    runHook preInstall
+    runHook preFixup
 
     pushd $out
       for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -29,7 +29,7 @@ stdenv.mkDerivation ({
       done
     popd
 
-    runHook postInstall
+    runHook postFixup
   '';
 
 } // removeAttrs args [ "version" "extraVersion" ] // {
