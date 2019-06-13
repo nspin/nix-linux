@@ -121,6 +121,7 @@ let
       configFile = config;
       config = mkQueriable (readConfig config);
       kernel = "${self.out}/${kernelFile}";
+      inherit kernelFile;
       modDirVersion = source.version;
       configEnv = configEnv {
         inherit source config;
