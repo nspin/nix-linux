@@ -26,12 +26,10 @@ lib.fix (self: with self; common // {
 
   doSource = callPackage ./source.nix {};
   doHeaders = callPackage ./headers.nix {};
+  doDtbs = callPackage ./dtbs.nix {};
   doKernel = callPackage ./build.nix {
     inherit readConfig mkQueriable;
   };
-  doDtbs = callPackage ./dtbs.nix {};
-
-  getInfo = callPackage ./info.nix {};
 
   kernelPatches = {
     bridge_stp_helper = ./patches/bridge-stp-helper.patch;
@@ -42,3 +40,10 @@ lib.fix (self: with self; common // {
   nixosCommonConfig = callPackage ./nixos-common-config.nix {};
 
 })
+
+  # doInfo = callPackage ./info.nix {};
+
+  #   buildFlags = [
+  #     "modules.builtin"
+  #     "include/config/kernel.release"
+  #   ];
