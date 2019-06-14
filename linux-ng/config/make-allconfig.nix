@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex ];
 
-  phases = [ "buildPhase" ];
+  phases = [ "buildPhase" "installPhase" ];
 
   makeFlags = [
     "-C" "${source}"
@@ -29,9 +29,13 @@ stdenv.mkDerivation {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ lib.optionals (allconfig != null) [
     "KCONFIG_ALLCONFIG=${allconfig}"
-  ] ++ [
-    "KCONFIG_CONFIG=$(out)"
+  # ] ++ [
+  #   "KCONFIG_CONFIG=$(out)"
   ];
+
+  installPhase = ''
+    mv .config $out
+  '';
 
   buildFlags = [
     target
