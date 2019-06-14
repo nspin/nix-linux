@@ -1,6 +1,6 @@
 { lib, callPackage, common }:
 
-common // {
+common // rec {
 
   getDefconfig = callPackage ./config/get-defconfig.nix {};
   makeConfig = callPackage ./config/make-allconfig.nix {};
@@ -10,6 +10,11 @@ common // {
   olddefconfig = callPackage ./config/make-olddefconfig.nix {};
 
   doSource = callPackage ./source.nix {};
-  doKernel = callPackage ./build.nix {};
+  doKernel = callPackage ./build.nix {
+    inherit configEnv;
+  };
+  doTools = callPackage ./tools.nix {
+    inherit configEnv;
+  };
 
 }

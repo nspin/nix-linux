@@ -13,4 +13,7 @@ in {
     inherit common;
   };
 
+  uboot-ng-tools = callPackage ./uboot-ng-tools {};
+  uboot-ng-mkimage = callPackage ./uboot-ng-tools/mkimage.nix {};
+
 }

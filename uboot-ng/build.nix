@@ -1,5 +1,6 @@
 { stdenv, lib, buildPackages, hostPlatform, buildPlatform
 , bc, bison, dtc, flex, openssl, python2, swig
+, configEnv
 }:
 
 { source
@@ -12,7 +13,7 @@
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
 
   name = "u-boot-${source.fullVersion}";
 
@@ -34,8 +35,6 @@ in stdenv.mkDerivation rec {
   makeFlags =  [
     "-C" "${source}"
     "O=$(PWD)"
-    # "V=1"
-    # "ARCH=${kernelArch}"
     "DTC=dtc"
   ] ++ lib.optionals isCross [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -48,7 +47,12 @@ in stdenv.mkDerivation rec {
     cp ${stdenv.lib.concatStringsSep " " filesToInstall} $out
   '';
 
-  inherit passthru;
+  passthru = {
+    inherit source config;
+    configEnv = configEnv {
+      inherit source config;
+    };
+  } // passthru;
 
 }
 
