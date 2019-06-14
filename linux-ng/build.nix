@@ -7,6 +7,7 @@
 { source
 , config
 , dtbs ? false
+, modules ? true
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
 , kernelTarget ? stdenv.hostPlatform.platform.kernelTarget
 , kernelInstallTarget ?
@@ -42,7 +43,9 @@ let
     name = "linux-${source.fullVersion}";
 
     outputs = [
-      "out" "mod" "dev"
+      "out" "dev"
+    ] ++ lib.optionals modules [
+      "mod"
     ] ++ lib.optionals dtbs [
       "dtbs"
     ];
@@ -79,6 +82,7 @@ let
 
     buildFlags = [
       kernelTarget
+    ] ++ lib.optionals modules [
       "modules"
     ] ++ lib.optionals dtbs [
       "dtbs"
@@ -86,6 +90,7 @@ let
 
     installFlags = [
       "INSTALL_PATH=$(out)"
+    ] ++ lib.optionals modules [
       "INSTALL_MOD_PATH=$(mod)"
     ] ++ lib.optionals dtbs [
       "INSTALL_DTBS_PATH=$(dtbs)"
@@ -94,6 +99,7 @@ let
 
     installTargets = [
       kernelInstallTarget
+    ] ++ lib.optionals modules [
       "modules_install"
     ] ++ lib.optionals dtbs [
       "dtbs_install"
@@ -101,6 +107,7 @@ let
 
     postInstall = ''
       release="$(cat $dev/include/config/kernel.release)"
+    '' + lib.optionalString modules ''
       rm $mod/lib/modules/$release/{source,build}
     '' + lib.optionalString nukeRefs ''
       find $out -type f -exec nuke-refs {} \;
