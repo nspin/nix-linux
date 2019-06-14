@@ -28,7 +28,7 @@ lib.fix (self: with self; common // {
   doHeaders = callPackage ./headers.nix {};
   doDtbs = callPackage ./dtbs.nix {};
   doKernel = callPackage ./build.nix {
-    inherit readConfig mkQueriable;
+    inherit configEnv readConfig mkQueriable;
   };
 
   kernelPatches = {

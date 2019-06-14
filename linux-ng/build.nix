@@ -1,7 +1,7 @@
 { stdenv, overrideCC, lib, buildPackages, nukeReferences
 , nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl, libelf, utillinux, kmod, sparse
 
-, readConfig, mkQueriable
+, configEnv, readConfig, mkQueriable
 }:
 
 { source
@@ -122,6 +122,9 @@ let
       config = mkQueriable (readConfig config);
       kernel = "${self.out}/${kernelFile}";
       modDirVersion = source.version;
+      configEnv = configEnv {
+        inherit source config;
+      };
     } // passthru;
 
   };
