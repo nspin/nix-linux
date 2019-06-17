@@ -123,10 +123,38 @@ let
       kernel = "${self.out}/${kernelFile}";
       inherit kernelFile;
       modDirVersion = source.version;
+
       configEnv = configEnv {
         inherit source config;
       };
+
     } // passthru;
+
+      shellHook = ''
+        config=${config}
+        source=$PWD
+        c() {
+          cp -v --no-preserve=ownership,mode $config .config
+        }
+        s() {
+          source=$(realpath ''${1:-.})
+        }
+        sap() {
+          sh ${self.source.stripAbsolutePaths} $source
+        }
+        m() {
+          make -C $source O=\$\(PWD\) ARCH=${kernelArch} ${lib.optionals isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"}
+        }
+        mb() {
+          m ${lib.concatStringsSep " " self.buildFlags}
+        }
+        mi() {
+          m ${lib.concatStringsSep " " self.installFlags} ${lib.concatStringsSep " " self.installTargets}
+        }
+        export out=$PWD/out
+        export mod=$PWD/mod
+        export dtbs=$PWD/dtbs
+      '';
 
   };
 
