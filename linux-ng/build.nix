@@ -133,6 +133,11 @@ let
       shellHook = ''
         config=${config}
         source=$PWD
+        obj=$PWD
+        v() {
+          echo "$@"
+          "$@"
+        }
         c() {
           cp -v --no-preserve=ownership,mode $config .config
         }
@@ -140,16 +145,17 @@ let
           source=$(realpath ''${1:-.})
         }
         sap() {
-          sh ${self.source.stripAbsolutePaths} $source
+          v sh ${self.source.stripAbsolutePaths} $source
         }
         m() {
-          make -C $source O=\$\(PWD\) ARCH=${kernelArch} ${lib.optionals isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"}
+          v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionals isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} "$@"
         }
         mb() {
-          m ${lib.concatStringsSep " " self.buildFlags}
+          v m ${lib.concatStringsSep " " self.buildFlags}
         }
         mi() {
-          m ${lib.concatStringsSep " " self.installFlags} ${lib.concatStringsSep " " self.installTargets}
+          mkdir -pv $out $mod $dtbs
+          v m ${lib.concatMapStringsSep " " (x: "'${x}'") self.installFlags} ${lib.concatStringsSep " " self.installTargets}
         }
         export out=$PWD/out
         export mod=$PWD/mod
