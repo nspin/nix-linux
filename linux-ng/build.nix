@@ -18,6 +18,11 @@
 , cc ? null
 , nukeRefs ? true
 , passthru ? {}
+
+# HACK: ignored, for nixos
+, kernelPatches ? null
+, features ? null
+, randstructSeed ? null
 }:
 
 let
@@ -123,6 +128,9 @@ let
       kernel = "${self.out}/${kernelFile}";
       inherit kernelFile;
       modDirVersion = source.version;
+
+      # HACK: for nixos
+      override = lib.const self.mod;
 
       configEnv = configEnv {
         inherit source config;
