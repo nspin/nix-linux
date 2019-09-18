@@ -16,9 +16,20 @@ let
     ];
   };
 
+  # config = makeConfig {
+  #   inherit source;
+  #   target = "bcm2711_defconfig";
+  # };
+
+  # $ nix-shell -A my-kernel.configEnv
+  # $ mm # alias for make $makeFlags menuconfig
+  # (navigate and set CONFIG_BINFMT_ELF=n)
+  # $ ms # alias for make $makeFlags savedefconfig
+
   config = makeConfig {
     inherit source;
-    target = "bcm2711_defconfig";
+    target = "alldefconfig";
+    allconfig = ./defconfig;
   };
 
 in doKernel rec {
