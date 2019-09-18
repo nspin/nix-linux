@@ -1,18 +1,8 @@
+{ fetchgit, linux-ng }:
+
+with linux-ng;
+
 let
-
-  nixpkgs = import <nixpkgs> {
-    crossSystem = {
-      system = "aarch64-linux";
-      config = "aarch64-unknown-linux-gnu";
-    };
-    overlays = [
-      (import ../overlay.nix)
-    ];
-  };
-
-  inherit (nixpkgs) fetchgit linux-ng;
-
-in with linux-ng; rec {
 
   source = doSource {
     version = "5.2.15";
@@ -31,9 +21,7 @@ in with linux-ng; rec {
     target = "bcm2711_defconfig";
   };
 
-  kernel = doKernel rec {
-    inherit source config;
-    dtbs = true;
-  };
-
+in doKernel rec {
+  inherit source config;
+  dtbs = true;
 }
