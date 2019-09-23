@@ -156,7 +156,7 @@ let
           v sh ${self.source.stripAbsolutePaths} $source
         }
         m() {
-          v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionals isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} "$@"
+          v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionalString isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} "$@"
         }
         mb() {
           v m ${lib.concatStringsSep " " self.buildFlags}
