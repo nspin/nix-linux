@@ -60,7 +60,13 @@ let
     NIX_NO_SELF_RPATH = true;
     hardeningDisable = [ "all" ];
 
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+      # for menuconfig in shell
+      buildPackages.pkgconfig
+      buildPackages.ncurses
+    ];
+
     nativeBuildInputs = [
       bison flex bc perl
       nettools utillinux
