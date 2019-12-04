@@ -1,6 +1,6 @@
 { lib, runCommand, uboot-ng-tools }:
 
-{ name
+{ name ? type
 , type
 , data
 , compression ? "none"

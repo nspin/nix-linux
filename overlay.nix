@@ -15,5 +15,6 @@ in {
 
   uboot-ng-tools = callPackage ./uboot-ng-tools {};
   uboot-ng-mkimage = callPackage ./uboot-ng-tools/mkimage.nix {};
+  uboot-ng-mkimage-fit = callPackage ./uboot-ng-tools/mkimage-fit.nix {};
 
 }
