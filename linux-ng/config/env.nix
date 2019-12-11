@@ -1,5 +1,6 @@
 { stdenv, lib, buildPackages
 , bison, flex
+, python3Packages
 }:
 
 { source
@@ -21,7 +22,10 @@ stdenv.mkDerivation {
     buildPackages.ncurses
   ];
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison flex
+    python3Packages.kconfiglib
+  ];
 
   makeFlags = [
     "-C" "${source}"
@@ -45,6 +49,11 @@ stdenv.mkDerivation {
     }
     ms() {
       m "$@" savedefconfig
+    }
+    mp() {
+      script=$1
+      shift
+      m scriptconfig SCRIPT=$script SCRIPT_ARGS="$*"
     }
   '' + lib.optionalString (config != null) ''
     cp -v --no-preserve=mode,ownership ${config} .config
