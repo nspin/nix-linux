@@ -8,6 +8,7 @@
 , config
 , dtbs ? false
 , modules ? true
+, headers ? false
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
 , kernelTarget ? stdenv.hostPlatform.platform.kernelTarget
 , kernelInstallTarget ?
@@ -53,6 +54,8 @@ let
       "mod"
     ] ++ lib.optionals dtbs [
       "dtbs"
+    ] ++ lib.optionals headers [
+      "hdrs"
     ];
 
     enableParallelBuilding = true;
@@ -74,6 +77,8 @@ let
       kmod
     ] ++ lib.optionals nukeRefs [
       nukeReferences
+    ] ++ lib.optionals headers [
+      rsync
     ];
 
     phases = [ "configurePhase" "buildPhase" "installPhase" ];
@@ -105,6 +110,8 @@ let
       "INSTALL_MOD_PATH=$(mod)"
     ] ++ lib.optionals dtbs [
       "INSTALL_DTBS_PATH=$(dtbs)"
+    ] ++ lib.optionals headers [
+      "INSTALL_HDR_PATH=$(hdrs)"
     ];
       # "INSTALL_MOD_STRIP=1"
 
@@ -114,12 +121,16 @@ let
       "modules_install"
     ] ++ lib.optionals dtbs [
       "dtbs_install"
+    ] ++ lib.optionals headers [
+      "headers_install"
     ];
 
     postInstall = ''
       release="$(cat $dev/include/config/kernel.release)"
     '' + lib.optionalString modules ''
       rm $mod/lib/modules/$release/{source,build}
+    '' + lib.optionalString headers ''
+      find $hdrs -name ..install.cmd -delete
     '' + lib.optionalString nukeRefs ''
       find $out -type f -exec nuke-refs {} \;
       find $mod -type f -exec nuke-refs {} \;
@@ -168,12 +179,13 @@ let
           v m ${lib.concatStringsSep " " self.buildFlags}
         }
         mi() {
-          mkdir -pv $out $mod $dtbs
+          mkdir -pv $out $mod $dtbs $hdrs
           v m ${lib.concatMapStringsSep " " (x: "'${x}'") self.installFlags} ${lib.concatStringsSep " " self.installTargets}
         }
         export out=$PWD/out
         export mod=$PWD/mod
         export dtbs=$PWD/dtbs
+        export hdrs=$PWD/hdrs
       '';
 
   };
