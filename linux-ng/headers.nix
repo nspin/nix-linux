@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ stdenv, buildPackages, rsync
 }:
 
 { source
@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   name = "linux-headers-${source.fullVersion}";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ rsync ];
 
   phases = [ "installPhase" ];
 
