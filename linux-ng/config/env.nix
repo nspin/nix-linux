@@ -50,6 +50,9 @@ stdenv.mkDerivation {
     ms() {
       m "$@" savedefconfig
     }
+    ma () {
+      m KCONFIG_ALLCONFIG=defconfig "$@" alldefconfig
+    }
     mp() {
       script=$1
       shift
