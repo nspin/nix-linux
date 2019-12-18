@@ -3,6 +3,7 @@
 { src, version, extraVersion ? "", ... } @ args:
 
 let
+  # TODO patchShebangs first
   stripAbsolutePaths = writeText "strip-absolute-paths.sh" ''
     for f in $(find "''${1:-.}" -name Makefile -o -name Makefile.include -o -name install.sh); do
       sed -i "$f" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
