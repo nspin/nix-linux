@@ -1,9 +1,14 @@
-{ stdenv, buildPackages, rsync
+{ stdenv, lib, buildPackages, rsync
 }:
 
 { source
+, kernelArch ? stdenv.hostPlatform.platform.kernelArch
 }:
 
+let
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
+in
 stdenv.mkDerivation {
 
   name = "linux-headers-${source.fullVersion}";
@@ -16,6 +21,9 @@ stdenv.mkDerivation {
   makeFlags = [
     "-C" "${source}"
     "O=$(PWD)"
+    "ARCH=${kernelArch}"
+  ] ++ lib.optionals isCross [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   installFlags = [
