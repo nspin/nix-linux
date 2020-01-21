@@ -17,4 +17,6 @@ in {
   uboot-ng-mkimage = callPackage ./uboot-ng-tools/mkimage.nix {};
   uboot-ng-mkimage-fit = callPackage ./uboot-ng-tools/mkimage-fit.nix {};
 
+  dtb-helpers = callPackage ./dtb-helpers {};
+
 }
