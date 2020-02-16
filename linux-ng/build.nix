@@ -176,11 +176,11 @@ let
           v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionalString isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} "$@"
         }
         mb() {
-          v m ${lib.concatStringsSep " " self.buildFlags}
+          v m ${lib.concatStringsSep " " self.buildFlags} "$@"
         }
         mi() {
           mkdir -pv $out $mod $dtbs $hdrs
-          v m ${lib.concatMapStringsSep " " (x: "'${x}'") self.installFlags} ${lib.concatStringsSep " " self.installTargets}
+          v m ${lib.concatMapStringsSep " " (x: "'${x}'") self.installFlags} ${lib.concatStringsSep " " self.installTargets} "$@"
         }
         export out=$PWD/out
         export mod=$PWD/mod
