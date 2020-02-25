@@ -1,0 +1,22 @@
+diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
+index ef2f2336c469..e0719a50af3e 100644
+--- a/scripts/kconfig/Makefile
++++ b/scripts/kconfig/Makefile
+@@ -29,6 +29,17 @@ xconfig: $(obj)/qconf
+ gconfig: $(obj)/gconf
+ 	$< $(silent) $(Kconfig)
+ 
++PHONY += scriptconfig iscriptconfig
++
++ifneq ($(filter scriptconfig,$(MAKECMDGOALS)),)
++ifndef SCRIPT
++$(error Use "make scriptconfig [PYTHON_ARGS=<args>] SCRIPT=<path> [SCRIPT_ARGS=<args>]")
++endif
++endif
++
++scriptconfig:
++	$(Q)$(PYTHON3) $(PYTHON_ARGS) $(SCRIPT) $(Kconfig) $(SCRIPT_ARGS)
++
+ menuconfig: $(obj)/mconf
+ 	$< $(silent) $(Kconfig)
+ 

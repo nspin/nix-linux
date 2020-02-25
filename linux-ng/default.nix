@@ -35,6 +35,7 @@ lib.fix (self: with self; common // {
     bridge_stp_helper = ./patches/bridge-stp-helper.patch;
     many_modules = ./patches/many-modules.patch;
     depmod_check = ./patches/depmod-check.patch;
+    scriptconfig = ./patches/scriptconfig.patch;
   };
 
   nixosCommonConfig = callPackage ./nixos-common-config.nix {};

@@ -58,6 +58,11 @@ stdenv.mkDerivation {
       shift
       m scriptconfig SCRIPT=$script SCRIPT_ARGS="$*"
     }
+    mpi() {
+      script=$1
+      shift
+      m scriptconfig PYTHON_ARGS=-i SCRIPT=$script SCRIPT_ARGS="$*"
+    }
   '' + lib.optionalString (config != null) ''
     cp -v --no-preserve=mode,ownership ${config} .config
   '';
