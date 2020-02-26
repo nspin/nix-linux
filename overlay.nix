@@ -36,6 +36,6 @@ in {
 
 
   raspbian = callPackage ./platforms/raspberry-pi/raspbian {};
-  raspberry-pi-firmware = platforms/raspberry-pi/firmware {};
+  raspberry-pi-firmware = callPackage ./platforms/raspberry-pi/firmware {};
 
 }
