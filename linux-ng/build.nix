@@ -173,7 +173,7 @@ let
           v sh ${self.source.stripAbsolutePaths} $source
         }
         m() {
-          v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionalString isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} "$@"
+          v make -C $source O=$obj ARCH=${kernelArch} ${lib.optionalString isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} -j$NIX_BUILD_CORES "$@"
         }
         mb() {
           v m ${lib.concatStringsSep " " self.buildFlags} "$@"
