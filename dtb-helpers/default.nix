@@ -1,4 +1,4 @@
-{ lib, runCommand, dtc }:
+{ lib, runCommand, callPackage, dtc }:
 
 rec {
 
@@ -31,5 +31,11 @@ rec {
     /dts-v1/;
     / { };
   '');
+
+  catFiles = paths: runCommand "x" {} ''
+    cat ${lib.concatStringsSep " " paths} > $out
+  '';
+
+  setChosen = callPackage ./set-chosen.nix {};
 
 }
