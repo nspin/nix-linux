@@ -26,6 +26,8 @@ in {
   qemu-aarch64 = qemu-base.override { targets = [ "aarch64-softmmu" ]; };
   qemu-x86_64 = qemu-base.override { targets = [ "x86_64-softmmu" ]; };
 
+  qemu-aarch64-user = qemu-base.override { targets = [ "aarch64-linux-user" ]; };
+
   qemu-all = qemu-base.override {
     targets = [
       "arm-softmmu" "aarch64-softmmu" "x86_64-softmmu"
