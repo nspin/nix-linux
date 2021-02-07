@@ -1,4 +1,4 @@
-# nixpkgs-linux-ng
+# nix-linux
 
 This repository contains a framework for configuring and building Linux and U-Boot using Nixpkgs.
 It also includes utilities for building out-of-tree kernel modules and various types of U-Boot images.
