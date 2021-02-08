@@ -468,7 +468,7 @@ let
       MEDIA_DIGITAL_TV_SUPPORT = yes;
       MEDIA_CAMERA_SUPPORT     = yes;
       MEDIA_RC_SUPPORT         = whenOlder "4.14" yes;
-			MEDIA_CONTROLLER         = yes;
+      MEDIA_CONTROLLER         = yes;
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
       MEDIA_ANALOG_TV_SUPPORT  = yes;
