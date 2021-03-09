@@ -1,7 +1,16 @@
-{ stdenv }:
+{ stdenv, writeText }:
 
 { src, version, extraVersion ? "", ... } @ args:
 
+let
+  stripAbsolutePaths = writeText "strip-absolute-paths.sh" ''
+    for mf in $(find "''${1:-.}" -name Makefile -o -name Makefile.include -o -name install.sh); do
+        echo "stripping FHS paths in \`$mf'..."
+        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+    done
+  '';
+
+in
 stdenv.mkDerivation ({
 
   name = "uboot-source";
@@ -23,12 +32,7 @@ stdenv.mkDerivation ({
 
     patchShebangs $out/tools
 
-    pushd $out
-      for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-          echo "stripping FHS paths in \`$mf'..."
-          sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-      done
-    popd
+    sh ${stripAbsolutePaths} $out
 
     runHook postFixup
   '';
@@ -38,6 +42,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit version extraVersion;
     fullVersion = version + extraVersion;
+    inherit stripAbsolutePaths;
   };
 
 })

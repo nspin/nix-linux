@@ -6,14 +6,15 @@
 { source
 , config
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
-, filesToInstall ? [ "u-boot.bin" ]
+, filesToInstall ? [ "u-boot" "u-boot.bin" ]
 , passthru ? {}
 }:
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  passthru_ = passthru;
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
 
   name = "u-boot-${source.fullVersion}";
 
@@ -25,7 +26,13 @@ in stdenv.mkDerivation {
   # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
   enableParallelBuilding = false;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    # for menuconfig in shell
+    buildPackages.pkgconfig
+    buildPackages.ncurses
+  ];
+
   nativeBuildInputs = [ bc bison dtc flex openssl python2 swig ];
 
   configurePhase = ''
@@ -52,7 +59,27 @@ in stdenv.mkDerivation {
     configEnv = configEnv {
       inherit source config;
     };
-  } // passthru;
+  } // passthru_;
+
+  shellHook = ''
+    config=${config}
+    v() {
+      echo "$@"
+      "$@"
+    }
+    c() {
+      cp -v --no-preserve=ownership,mode $config .config
+    }
+    sap() {
+      v sh ${source.stripAbsolutePaths} "$@"
+    }
+    m() {
+      v make DTC=dtc ${lib.optionalString isCross "CROSS_COMPILE=${stdenv.cc.targetPrefix}"} -j$NIX_BUILD_CORES "$@"
+    }
+    mb() {
+      v m ${lib.concatStringsSep " " buildFlags} "$@"
+    }
+  '';
 
 }
 
