@@ -13,6 +13,9 @@
 
 runCommand "${name}.uimg" {
   nativeBuildInputs = [ uboot-ng-tools ];
+  passthru = {
+    inherit data;
+  };
 } ''
   mkimage ${lib.optionalString xip "-x"} -n ${name} -T ${type} -d ${data} -C ${compression} \
     ${lib.optionalString (arch != null) "-A ${arch}"} \
