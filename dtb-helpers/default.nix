@@ -19,6 +19,14 @@ rec {
     dtc -I dtb -O dts -o $out ${dtb}
   '';
 
+  decompileForce = decompileForceWithName "dts";
+
+  decompileForceWithName = name: dtb: runCommand name {
+    nativeBuildInputs = [ dtc ];
+  } ''
+    dtc -f -I dtb -O dts -o $out ${dtb}
+  '';
+
   applyOverlay = dtb: dtbo: applyOverlays dtb [ dtbo ];
 
   applyOverlays = dtb: dtbos: runCommand "dtb" {
