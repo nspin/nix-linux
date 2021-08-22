@@ -24,6 +24,8 @@ lib.fix (self: with self; common // {
   savedefconfig = callPackage ./config/make-savedefconfig.nix {};
   olddefconfig = callPackage ./config/make-olddefconfig.nix {};
 
+  modifyConfig = callPackage ./config/modify-config.nix {};
+
   doSource = callPackage ./source.nix {};
   doHeaders = callPackage ./headers.nix {};
   doDtbs = callPackage ./dtbs.nix {};
