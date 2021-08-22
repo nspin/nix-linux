@@ -14,4 +14,6 @@ let
 in
   releases // {
     latest = releases."2019-07-10";
+  } // {
+    inherit mkBoot;
   }
