@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    cp ${stdenv.lib.concatStringsSep " " filesToInstall} $out
+    cp ${lib.concatStringsSep " " filesToInstall} $out
   '';
 
   passthru = {
