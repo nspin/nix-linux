@@ -1,7 +1,7 @@
 { stdenv }:
 
 { source
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+, kernelArch ? stdenv.hostPlatform.linuxArch
 , defconfig ? "defconfig"
 }:
 

@@ -9,8 +9,8 @@
 , dtbs ? false
 , modules ? true
 , headers ? false
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
-, kernelTarget ? stdenv.hostPlatform.platform.kernelTarget
+, kernelArch ? stdenv.hostPlatform.linuxArch
+, kernelTarget ? stdenv.hostPlatform.linux-kernel.target
 , kernelInstallTarget ?
     { uImage = "uinstall";
       zImage = "zinstall";

@@ -4,7 +4,7 @@
 
 { source
 , config ? null
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+, kernelArch ? stdenv.hostPlatform.linuxArch
 }:
 
 let

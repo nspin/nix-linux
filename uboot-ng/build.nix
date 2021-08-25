@@ -5,7 +5,7 @@
 
 { source
 , config
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+, kernelArch ? stdenv.hostPlatform.linuxArch
 , filesToInstall ? [ "u-boot" "u-boot.bin" ]
 , passthru ? {}
 }:
