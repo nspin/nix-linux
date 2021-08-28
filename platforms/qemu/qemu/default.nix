@@ -3,11 +3,9 @@
 , ncurses, perl, pixman, vde2, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , attr, libcap, libcap_ng
-, xenSupport ? false, xenTools ? null
+
 , targets ? []
 }:
-
-# Need gicv2 virtualization extension in -machine virt for xen
 
 with lib;
 
@@ -30,11 +28,6 @@ stdenv.mkDerivation rec {
     vde2 lzo snappy
     gnutls nettle curl
     libaio libcap_ng libcap attr
-  ] ++ optionals xenSupport [ xenTools ];
-
-  patches = [
-    # ./patches/no-etc-install.patch
-    ./patches/fix-qemu-ga.patch
   ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -44,17 +37,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=$(out)/var" # or modify install target in Makefile
     "--target-list=${lib.concatStringsSep "," targets}"
     "--enable-linux-aio"
-  ] ++ optional xenSupport "--enable-xen";
+    "--sysconfdir=/etc"
+    "--localstatedir=$(out)/var" # or modify install target in Makefile
+  ];
 
   doCheck = false; # tries to access /dev
   enableParallelBuilding = true;
-
-  passthru = {
-    qemu-system-i386 = "bin/qemu-system-i386";
-  };
-
 }
