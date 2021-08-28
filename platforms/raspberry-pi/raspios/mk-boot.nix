@@ -1,9 +1,9 @@
 { stdenvNoCC, mtools, utillinux }:
 
-image:
+{ img, version }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "raspbian-${version}-boot";
+  name = "raspios-${version}-boot";
   dontAddHostSuffix = true;
 
   phases = [ "installPhase" ];
@@ -12,14 +12,11 @@ stdenvNoCC.mkDerivation rec {
     mtools utillinux
   ];
 
-  inherit image;
-  inherit (image) version;
-
   installPhase = ''
-    sector=$(partx -g -r -n 1 -o START $image)
+    sector=$(partx -g -r -n 1 -o START ${img})
     bytes=$(($sector * 512))
     # This usage is undocumented. I don't know how it works.
-    mcopy -i $image@@$bytes -sv ::. $out
+    mcopy -i ${img}@@$bytes -sv ::. $out
   '';
 
 }

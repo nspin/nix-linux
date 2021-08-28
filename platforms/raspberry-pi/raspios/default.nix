@@ -6,14 +6,17 @@ let
 
   f = version: image: {
     inherit image;
-    boot = mkBoot image;
+    boot = mkBoot {
+      img = "${image}/${image.img}";
+      inherit (image) version;
+    };
   };
 
   releases = lib.mapAttrs f images;
 
 in
   releases // {
-    latest = releases."2019-07-10";
+    latest = releases."2021-05-07";
   } // {
     inherit mkBoot;
   }

@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
-    rev = "02bff4e75712094ffb1ab2ec58a8115ca3e52290";
-    sha256 = "13g5xcqn1gwswjn8ciq6m3k8ch226g1q082xs1bp2h4zfmv0g3ry";
+    rev = "24f05a6e0eadcf001159e3618759cfb51761fd0e";
+    sha256 = "sha256-w+MF90boIxXGGAbJ0ei++OVtEKkZ3elq5HkQQKje0dk=";
   };
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = ''

@@ -37,7 +37,7 @@ in {
   soc-term = callPackage ./platforms/qemu/soc-term {};
 
 
-  raspbian = callPackage ./platforms/raspberry-pi/raspbian {};
+  raspios = callPackage ./platforms/raspberry-pi/raspios {};
   raspberry-pi-firmware = callPackage ./platforms/raspberry-pi/firmware {};
 
 }
