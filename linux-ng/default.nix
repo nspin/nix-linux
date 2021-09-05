@@ -39,6 +39,9 @@ lib.fix (self: with self; common // {
     scriptconfig = ./patches/scriptconfig.patch;
   };
 
+  mkModulesClosure = callPackage ./mk-modules-closure.nix {};
+  aggregateModules = callPackage ./aggregate-modules.nix {};
+
 })
 
   # doInfo = callPackage ./info.nix {};
