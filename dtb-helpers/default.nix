@@ -5,11 +5,15 @@ rec {
   compile = compileWithName "dtb";
   compileOverlay = compileWithName "dtbo";
 
-  compileWithName = name: dts: runCommand name {
+  compileWithName = name: dts: lib.fix (self: runCommand name {
     nativeBuildInputs = [ dtc ];
+    passthru = {
+      inherit dts;
+      decompiled = decompileWithName name self;
+    };
   } ''
     dtc -I dts -O dtb -o $out ${dts}
-  '';
+  '');
 
   decompile = decompileWithName "dts";
 
