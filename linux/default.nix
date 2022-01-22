@@ -1,4 +1,4 @@
-{ lib, callPackage, common }:
+{ lib, callPackage, kconfigCommon }:
 
 let
 
@@ -15,7 +15,7 @@ let
   mkQueriable = config: config // mkQueries config;
 
 in
-lib.fix (self: with self; common // {
+rec {
 
   getDefconfig = callPackage ./config/get-defconfig.nix {};
   makeConfig = callPackage ./config/make-allconfig.nix {};
@@ -26,11 +26,11 @@ lib.fix (self: with self; common // {
 
   modifyConfig = callPackage ./config/modify-config.nix {};
 
-  doSource = callPackage ./source.nix {};
-  doHeaders = callPackage ./headers.nix {};
-  doDtbs = callPackage ./dtbs.nix {};
-  doKernel = callPackage ./build.nix {
-    inherit configEnv readConfig mkQueriable;
+  prepareSource = callPackage ./prepare-source.nix {};
+  buildHeaders = callPackage ./build-headers.nix {};
+  buildDtbs = callPackage ./build-dtbs.nix {};
+  buildKernel = callPackage ./build-kernel.nix {
+    inherit kconfigCommon configEnv mkQueriable;
   };
 
   kernelPatches = {
@@ -42,10 +42,9 @@ lib.fix (self: with self; common // {
   mkModulesClosure = callPackage ./mk-modules-closure.nix {};
   aggregateModules = callPackage ./aggregate-modules.nix {};
 
-})
+}
 
-  # doInfo = callPackage ./info.nix {};
-
+  # buildInfo =
   #   buildFlags = [
   #     "modules.builtin"
   #     "include/config/kernel.release"

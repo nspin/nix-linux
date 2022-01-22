@@ -3,5 +3,5 @@
 config:
 
 import (runCommand "config.nix" {} ''
-  ${buildPackages.python3}/bin/python ${./read.py} < ${config} > $out
+  ${buildPackages.python3}/bin/python ${./helper.py} < ${config} > $out
 '').outPath

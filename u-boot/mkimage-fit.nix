@@ -1,4 +1,4 @@
-{ lib, runCommand, dtc, uboot-ng-tools }:
+{ lib, runCommand, dtc, tools }:
 
 { name ? "fit"
 , its
@@ -6,7 +6,7 @@
 }:
 
 runCommand "${name}.itb" {
-  nativeBuildInputs = [ dtc uboot-ng-tools ];
+  nativeBuildInputs = [ dtc tools ];
 } ''
   mkimage -f ${its} ${lib.concatMapStringsSep " " (x: "-D ${x}") dtc_options} itb
   mv itb $out

@@ -1,9 +1,9 @@
-{ lib, fetchgit, uboot-ng, runCommand }:
-
-with uboot-ng;
+{ lib, fetchgit, runCommand
+, prepareSource, makeConfig, buildTools
+}:
 
 let
-  source = doSource rec {
+  source = prepareSource rec {
     version = "2019.04";
     src = fetchgit {
       url = "https://github.com/u-boot/u-boot";
@@ -21,6 +21,6 @@ let
     allconfig = ./defconfig;
   };
 
-in doTools rec {
+in buildTools rec {
   inherit source config;
 }

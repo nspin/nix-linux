@@ -1,4 +1,4 @@
-{ lib, runCommand, uboot-ng-tools }:
+{ lib, runCommand, tools }:
 
 { name ? type
 , type
@@ -12,7 +12,7 @@
 }:
 
 runCommand "${name}.uimg" {
-  nativeBuildInputs = [ uboot-ng-tools ];
+  nativeBuildInputs = [ tools ];
   passthru = {
     inherit data;
   };

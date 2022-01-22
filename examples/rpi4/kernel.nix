@@ -1,10 +1,10 @@
-{ fetchgit, linux-ng }:
+{ fetchgit, linuxHelpers }:
 
-with linux-ng;
+with linuxHelpers.linux;
 
 let
 
-  source = doSource {
+  source = prepareSource {
     version = "5.2.15";
     src = fetchgit {
       url = "https://github.com/raspberrypi/linux";
@@ -12,7 +12,7 @@ let
       sha256 = "0s35hp3bai9sv0h0gkb21304mv79myb7ar50f4wfij7py833g6nc";
     };
     patches = with kernelPatches; [
-      bridge_stp_helper
+      # ...
     ];
   };
 
@@ -32,7 +32,7 @@ let
     allconfig = ./defconfig;
   };
 
-in doKernel rec {
+in buildKernel rec {
   inherit source config;
   dtbs = true;
 }

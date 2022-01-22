@@ -8,6 +8,6 @@
         (k: v: (config.${k} or null) == v)
         subconfig);
 
-  readConfig = callPackage ./read.nix {};
+  readConfig = callPackage ./read-config.nix {};
 
 }
