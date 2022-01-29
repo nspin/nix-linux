@@ -44,7 +44,7 @@ rec {
     / { };
   '');
 
-  catFiles = paths: runCommand "x" {} ''
+  catFiles = paths: runCommand "concatenation" {} ''
     cat ${lib.concatStringsSep " " paths} > $out
   '';
 
