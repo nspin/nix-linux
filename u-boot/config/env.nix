@@ -1,4 +1,5 @@
 { stdenv, lib, buildPackages
+, pkg-config, ncurses
 , bison, flex
 }:
 
@@ -13,12 +14,12 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "linux-config-env";
+  name = "u-boot-config-env";
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-    buildPackages.pkgconfig
-    buildPackages.ncurses
+    pkg-config
+    ncurses
   ];
 
   nativeBuildInputs = [ bison flex ];

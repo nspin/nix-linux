@@ -1,4 +1,5 @@
 { stdenv, lib, buildPackages
+, pkg-config, ncurses
 , bison, flex
 , python3Packages
 }:
@@ -18,8 +19,8 @@ stdenv.mkDerivation {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-    buildPackages.pkgconfig
-    buildPackages.ncurses
+    pkg-config
+    ncurses
   ];
 
   nativeBuildInputs = [
