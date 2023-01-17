@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     buildPackages.ncurses
   ];
 
-  nativeBuildInputs = [ bc bison dtc flex openssl python2 swig ];
+  nativeBuildInputs = [ bc bison dtc flex ];
 
   configurePhase = ''
     cp -v ${config} .config
